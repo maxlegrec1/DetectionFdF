@@ -20,5 +20,5 @@ def transform_db(INPUT_DB_PATH):
         resize_en_place(INPUT_DB_PATH+"/"+spec)
 
 if __name__=='__main__':
-    INPUT_DB_PATH="Dataset_spec/Training"
+    INPUT_DB_PATH="Dataset_spec/Validation"
     transform_db(INPUT_DB_PATH)
