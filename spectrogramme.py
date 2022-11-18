@@ -84,7 +84,7 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
 
 
 ims = plotstft(
-"Dataset/Training/Autre108638-9-0-6.wav",plotpath="test_spec.jpg")
+"Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")
 
 
 def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
@@ -105,8 +105,8 @@ def get_beginning_ind(OUTPUT_DB_PATH):
 
 
 if __name__=='__main__':
-    INPUT_DB_PATH="Dataset/Test"
-    OUTPUT_DB_PATH='Dataset_spec/Test'
+    INPUT_DB_PATH="Dataset/Training"
+    OUTPUT_DB_PATH='Dataset_spec/Training'
     start_index=get_beginning_ind(OUTPUT_DB_PATH)
     create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,start_index)
     print("done")
