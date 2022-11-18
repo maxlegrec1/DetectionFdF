@@ -2,11 +2,11 @@ from keras.datasets import mnist
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from DetectionFdF.conf_matrix import show_confusion_matrix
+from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
-
+print(train_X[0].shape)
 print('X_train: ' + str(train_X.shape))
 print('Y_train: ' + str(train_y.shape))
 print('X_test:  '  + str(test_X.shape))
