@@ -4,22 +4,25 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
+from load_db import load_dataset
+#(train_X, train_y), (test_X, test_y) = mnist.load_data()
+nb_batch = 400
 
-(train_X, train_y), (test_X, test_y) = mnist.load_data()
-print(train_X[0].shape)
-print('X_train: ' + str(train_X.shape))
+
+#print(train_X)
+'''print('X_train: ' + str(train_X.shape))
 print('Y_train: ' + str(train_y.shape))
 print('X_test:  '  + str(test_X.shape))
-print('Y_test:  '  + str(test_y.shape))
+print('Y_test:  '  + str(test_y.shape))'''
 
 
 model = tf.keras.models.Sequential()
 
-model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (28,28,1)))
+model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (645,1168,3)))
 model.add(tf.keras.layers.MaxPooling2D())
-model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (28,28,1)))
+model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (645,1168,3)))
 model.add(tf.keras.layers.MaxPooling2D())
-model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (28,28,1)))
+model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (645,1168,3)))
 
 model.add(tf.keras.layers.Flatten())
 
@@ -30,15 +33,22 @@ model.summary()
 
 model.compile(optimizer = 'adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(), metrics = ['accuracy'])
 
-history = model.fit(train_X, train_y, epochs = 5, batch_size = 16, validation_data = (test_X, test_y))
+for i in range(nb_batch):
+  (train_X,train_y) = load_dataset("Dataset_spec/Training",nb_batch,i)
+  model.train_on_batch(train_X,train_y)
+  train_X,train_y=0,0
+  print(i)
+(test_X,test_y) = load_dataset("Dataset_spec/Test")
 
+#history = model.fit(train_X, train_y, epochs = 5, batch_size = 16, validation_data = (test_X, test_y))
+'''
 plt.plot(history.history['accuracy'], label='accuracy')
 plt.plot(history.history['val_accuracy'], label='val_accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.ylim([0, 1])
 plt.legend(loc='lower right')
-plt.show()
+plt.show()'''
 
 predic = model(test_X)
 
