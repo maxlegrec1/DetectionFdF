@@ -5,8 +5,9 @@ import tensorflow as tf
 from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from load_db import load_dataset
+from load_db import generate_arrays_from_file
 #(train_X, train_y), (test_X, test_y) = mnist.load_data()
-nb_batch = 400
+nb_batch = 300
 
 
 #print(train_X)
@@ -18,38 +19,32 @@ print('Y_test:  '  + str(test_y.shape))'''
 
 model = tf.keras.models.Sequential()
 
-model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (645,1168,3)))
+model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (289,465,3)))
 model.add(tf.keras.layers.MaxPooling2D())
-model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (645,1168,3)))
+model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (289,465,3)))
 model.add(tf.keras.layers.MaxPooling2D())
-model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (645,1168,3)))
+model.add(tf.keras.layers.Conv2D(64, 3, activation = 'relu', input_shape = (289,465,3)))
 
 model.add(tf.keras.layers.Flatten())
 
 model.add(tf.keras.layers.Dense(64, activation = 'relu'))
-model.add(tf.keras.layers.Dense(10, activation = 'softmax'))
+model.add(tf.keras.layers.Dense(2, activation = 'softmax'))
 
 model.summary()
 
-model.compile(optimizer = 'adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(), metrics = ['accuracy'])
+model.compile(optimizer = 'adam', loss = tf.keras.losses.CategoricalCrossentropy(), metrics = ['accuracy'])
 
-for i in range(nb_batch):
-  (train_X,train_y) = load_dataset("Dataset_spec/Training",nb_batch,i)
-  model.train_on_batch(train_X,train_y)
-  train_X,train_y=0,0
-  print(i)
-(test_X,test_y) = load_dataset("Dataset_spec/Test")
 
-#history = model.fit(train_X, train_y, epochs = 5, batch_size = 16, validation_data = (test_X, test_y))
-'''
-plt.plot(history.history['accuracy'], label='accuracy')
-plt.plot(history.history['val_accuracy'], label='val_accuracy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.ylim([0, 1])
-plt.legend(loc='lower right')
-plt.show()'''
+(test_X,test_y) = load_dataset("Dataset_spec/Test",7,0)
+batch_number=800 #correspond a un batch size de 4000/800 = 3
+gen=generate_arrays_from_file("Dataset_spec/Training",batch_number)
 
+
+model.fit_generator(gen,batch_number,10,validation_data=(test_X,test_y))
+
+test_X=test_X[:100]
+test_y=test_y[:100]
+test_y=np.argmax(test_y, axis=1)
 predic = model(test_X)
 
 print(np.array(predic[0]))
@@ -60,7 +55,7 @@ for i in range (len(predic)):
   L[i] = list(np.array(predic[i])).index(max(np.array(predic[i])))
 
 cm = confusion_matrix(test_y, L)
-
+print(cm)
 class_names = [str(i) for i in range (10)]
 
 show_confusion_matrix(cm, class_names)
