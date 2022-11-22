@@ -42,9 +42,9 @@ plt.ylim([0, 1])
 plt.legend(loc='lower right')
 plt.show()"""
 
-predic = model(test_X)
+model.save("Saved_models/CNN")
 
-print(np.array(predic[0]))
+predic = model(test_X)
 
 L = [0]*len(predic)
 
