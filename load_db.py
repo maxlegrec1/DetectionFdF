@@ -7,6 +7,7 @@ def load_dataset(DB_PATH,nb_batch=1,current_batch_number=0):
     Y=np.empty((0,2),int)
     directory=os.fsencode(DB_PATH)
     list=os.listdir(directory)
+    np.random.shuffle(list)
     batch_size=len(list)//nb_batch
     list_shrunk=list[current_batch_number*batch_size:(current_batch_number+1)*batch_size]
     for spec_path in tqdm(list_shrunk):
@@ -44,7 +45,7 @@ def generate_arrays_from_file(INPUT_PATH,batch_number):
                 Y=np.append(Y,np.expand_dims(np.array([1,0]),axis=0),axis=0)
             else:
                 Y=np.append(Y,np.expand_dims(np.array([0,1]),axis=0),axis=0)
-        #print(X.shape)
+        #print(X)
         yield (X,Y)
         i+=1
         c+=1
