@@ -5,7 +5,12 @@ import tensorflow as tf
 from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from dataset_for_nn import create_data_list
-from shuffle import unison_shuffled_copies
+
+def unison_shuffled_copies(couple):
+    (a, b) = couple
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return (a[p], b[p])
 
 (train_X, train_y)= unison_shuffled_copies(create_data_list('Training'))
 (val_X, val_Y) = create_data_list('Validation')
