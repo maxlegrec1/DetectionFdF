@@ -8,8 +8,8 @@ from dataset_for_nn import create_data_list
 from shuffle import unison_shuffled_copies
 
 (train_X, train_y)= unison_shuffled_copies(create_data_list('Training'))
-(val_X, val_Y) = unison_shuffled_copies(create_data_list('Validation'))
-(test_X, test_y) = unison_shuffled_copies(create_data_list("Test"))
+(val_X, val_Y) = create_data_list('Validation')
+(test_X, test_y) = create_data_list("Test")
 
 
 
@@ -42,7 +42,7 @@ plt.ylim([0, 1])
 plt.legend(loc='lower right')
 plt.show()"""
 
-model.save("Saved_models/CNN")
+model.save("model.h5")
 
 predic = model(test_X)
 
