@@ -42,7 +42,7 @@ plt.ylim([0, 1])
 plt.legend(loc='lower right')
 plt.show()"""
 
-model.save("model.h5")
+model.save("Saved_models/model.h5")
 
 predic = model(test_X)
 
