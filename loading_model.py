@@ -1,6 +1,5 @@
 import tensorflow as tf
 from dataset_for_nn import create_data_list
-from shuffle import unison_shuffled_copies
 from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 import numpy as np
