@@ -14,7 +14,6 @@ def resize_en_place(image):
 
 def resize_path(image_path):
     image= cv.imread(image_path)
-    print(np.shape(image))
     resized = resize_en_place(image)
     cv.imwrite(image_path,resized)
 

@@ -1,10 +1,12 @@
 import tensorflow as tf
 import torchaudio
-from database import silence, diviser_son
+import cv2 as cv
 import numpy as np
+from PIL import Image
+from database import silence, diviser_son
 from FILTRE import filtre
 from spectrogramme import plotstft
-from resize_db import resize_en_place
+from resize_db import resize_path
 from reseau_neurone import predic
 
 def load_file(path):
@@ -19,11 +21,13 @@ def prepa(sig, sr):
 def filtrage(sig):
     return filtre(sig)
 
-def spect(sig, sr):
-    return plotstft(sig, sr)
+def spect(sig, sr, i):
+    plotstft(sig, sr, plotpath='Main_specs/image_'+str(i)+'.png')
 
-def resize(image):
-    return resize_en_place(image)
+def resize(i):
+    path = 'Main_specs/image_'+str(i)+'.png'
+    resize_path(path)
+    return np.asarray(Image.open(path))
 
 def load_model(model_choice):
     if model_choice == "CNN":
@@ -36,19 +40,15 @@ def load_model(model_choice):
 
 if __name__ == "__main__":
     
-    model_choice = input("Choice of model : CNN or SVM")
-    path_of_the_file = input("Path of the file")
+    model_choice = input("Choice of model : CNN or SVM ")
+    path_of_the_file = input("Path of the file ")
     (sound, sr) = load_file(path_of_the_file)
-    print(sound)
     prep_sounds = prepa(sound, sr)
-    print(prep_sounds)
-
-    specs = []
-    for sound in prep_sounds:
-        filtered = filtrage(sound)
-        specs.append(resize(spect(filtered, sr)))
-    if len(specs) == 0:
-        raise ValueError("Le fichier faisait moins de 4 secondes")
-    pred = predic(specs, load_model(model_choice))
+    specs, pred = [], []
+    for i in range(len(prep_sounds)):
+        filtered = filtrage(prep_sounds[i])
+        spect(filtered, sr, i)
+        specs.append(resize(i))
+        pred.append(predic(specs[i].reshape(1, 289, 465, 3), load_model(model_choice)))
 
     print(pred)
