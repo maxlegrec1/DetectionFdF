@@ -49,15 +49,19 @@ plt.show()"""
 
 model.save("Saved_models/model.h5")
 
-predic = model(test_X)
+def predic(signals, model):
+    predic = model(signals)
 
-L = [0]*len(predic)
+    L = [0]*len(predic)
 
-for i in range (len(predic)):
-  L[i] = list(np.array(predic[i])).index(max(np.array(predic[i])))
+    for i in range (len(predic)):
+        L[i] = list(np.array(predic[i])).index(max(np.array(predic[i])))
+    return L
+
+L = predic(test_X, model)
 
 cm = confusion_matrix(test_y, L)
 
-class_names = ['Pas feu', 'Feu']
+class_names = ['Negatif', 'Positif']
 
 show_confusion_matrix(cm, class_names)

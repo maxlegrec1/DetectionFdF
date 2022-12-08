@@ -4,7 +4,7 @@ from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
-model = tf.keras.models.load_model("model.h5")
+model = tf.keras.models.load_model("Saved_models/model.h5")
 
 (test_X, test_y) = create_data_list("Test")
 
@@ -17,6 +17,6 @@ for i in range (len(predic)):
 
 cm = confusion_matrix(test_y, L)
 
-class_names = ['Pas feu', 'Feu']
+class_names = ['Négatif', 'Positif']
 
 show_confusion_matrix(cm, class_names)
