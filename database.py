@@ -3,7 +3,7 @@ import soundfile as sf
 import scipy.fftpack
 import matplotlib.pyplot as plt
 import numpy as np
-import wavio
+
 
 
 sample_freq=44100
@@ -253,3 +253,5 @@ def vider_training_val_test():
             src =f"{folder}/{list[i]}/{filename}"  
             dst =f"{folder}/{filename}"
             os.rename(src,dst)
+
+
