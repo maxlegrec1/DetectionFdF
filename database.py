@@ -160,17 +160,20 @@ def compter_dataset(): #pour connaître la proportion feu/pas feu
     print("Il y a "+str(autre)+" autre")
 
 def dataset_to_autre(): #Pour enlever les fichiers ne contenant pas de feu
-    folder="Dataset"
+    print("vide le dataset")
+    folder="Dataset/Validation"
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
+        print("boucle")
         if filename[:3]=="Aut":
+            print("if")
             fichier=filename.split('-',3)
             src =f"{folder}/{filename}"  # foldername/filename, if .py file is outside folder
             dst =f"{folder2}{int(fichier[1])+1}/{filename}"
             os.rename(src,dst)
 
 def delete_feu_dataset(): #on supprime les feu du dataset
-    folder="Dataset"
+    folder="Dataset/Validation"
     for count, filename in enumerate(os.listdir(folder)):
         if filename[:3]=="Feu":
             os.remove(f"{folder}/{filename}")
@@ -253,3 +256,45 @@ def vider_training_val_test():
             src =f"{folder}/{list[i]}/{filename}"  
             dst =f"{folder}/{filename}"
             os.rename(src,dst)
+
+
+def autre_to_dataset2(liste): #on transfère les fichiers ne contenant pas du feu dans le dataset
+    #on prend en entrée une liste qui nous donne le nobre de sons a prendre par classe
+    folder2="Dataset"
+    for k in range(1,11):
+        nbre=liste[k-1]
+        folder="audio/fold"+str(k)
+        for count, filename in enumerate(os.listdir(folder)):
+            data,samplerate=sf.read(f"{folder}/{filename}")
+            if count<=nbre*0.7:
+                src =f"{folder}/{filename}" 
+                dst =f"{folder2}/Training/{filename}"
+                os.rename(src,dst)
+            elif count<=nbre*0.9:
+                src =f"{folder}/{filename}" 
+                dst =f"{folder2}/Validation/{filename}"
+                os.rename(src,dst)
+            elif count<=nbre:
+                src =f"{folder}/{filename}" 
+                dst =f"{folder2}/Test/{filename}"
+                os.rename(src,dst)
+            else:
+                break
+choix2=[400,175,559,408,400,400,16,400,400,400]
+
+
+def feu_to_dataset2(): #on transfere les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
+    for count, filename in enumerate(os.listdir("Feu")):
+        name=filename.split('_',2)
+        if int(name[1][:-4])<=50:
+            folder="Dataset/Training"
+        elif int(name[1][:-4])<=65:
+            folder="Dataset/Validation"
+        else:
+            folder="Dataset/Test"
+        data,samplerate=sf.read(f"Feu/{filename}")
+        (i,j)=silence(data)
+        signaux=diviser_son(data[i:j])
+        for k in range(len(signaux)):
+            wavio.write(f"{folder}/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
+
