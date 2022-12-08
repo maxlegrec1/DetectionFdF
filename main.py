@@ -12,8 +12,8 @@ def load_file(path):
     return (sig, sr)
 
 def prepa(sig, sr):
-    (i, j) = silence(sig)
-    list_of_sounds=diviser_son(sig[i:j])
+    (i, j) = silence(sig[0, :])
+    list_of_sounds=diviser_son(sig[0, i:j], sr, 4)
     return list_of_sounds
 
 def filtrage(sig):
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     specs = []
     for sound in prep_sounds:
         filtered = filtrage(sound)
-        specs.append(resize(spect(filtered)))
+        specs.append(resize(spect(filtered, sr)))
     if len(specs) == 0:
         raise ValueError("Le fichier faisait moins de 4 secondes")
     pred = predic(specs, load_model(model_choice))

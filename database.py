@@ -75,7 +75,6 @@ def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échan
                 os.rename(src,dst)
 
 def silence(data):                  #enlever les silences de début et de fin
-    data = data[0]
     i = 0
     while i < len(data) and data[i] == 0:
         i +=1
@@ -85,7 +84,7 @@ def silence(data):                  #enlever les silences de début et de fin
 
     return (i, j)
 
-def diviser_son(data): #diviser un son trop long en plusieurs sons plus petits
+def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): #diviser un son trop long en plusieurs sons plus petits
     nombre_points = len(data)
     points_esperes = sample_freq * audio_duration
     if nombre_points >= points_esperes:
@@ -98,7 +97,7 @@ def feu_to_dataset(): #on transfere les sons contenant du feu dans le dataset (e
     for count, filename in enumerate(os.listdir("Feu")):
         print(count)
         data,samplerate=sf.read(f"Feu/{filename}")
-        (i,j)=silence(data)
+        (i,j)=silence(data[0, :])
         signaux=diviser_son(data[i:j])
         for k in range(len(signaux)):
             wavio.write(f"Dataset/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
