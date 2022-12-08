@@ -7,10 +7,8 @@ def show_confusion_matrix(matrix, labels):
     
     N = len(labels)
 
-    # We want to show all ticks...
     ax.set_xticks(np.arange(N))
     ax.set_yticks(np.arange(N))
-    # ... and label them with the respective list entries
     ax.set_xticklabels(labels)
     ax.set_yticklabels(labels)
 

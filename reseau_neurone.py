@@ -5,13 +5,13 @@ from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from dataset_for_nn import create_data_list
 
-def unison_shuffled_copies(couple):
+def unison_shuffled_copies(couple):     #mélange les données pour éviter le sur-apprentissage
     (a, b) = couple
     assert len(a) == len(b)
     p = np.random.permutation(len(a))
     return (a[p], b[p])
 
-def train():
+def train():                #création du modèle
 
   (train_X, train_y)= unison_shuffled_copies(create_data_list('Training'))
   (val_X, val_Y) = create_data_list('Validation')
@@ -48,7 +48,7 @@ def train():
   model.save("Saved_models/model.h5")
   return model
 
-def predic(signals, model):
+def predic(signals, model):     #prédiction des données
     predic = model(signals)
 
     L = [0]*len(predic)
@@ -57,14 +57,14 @@ def predic(signals, model):
         L[i] = list(np.array(predic[i])).index(max(np.array(predic[i])))
     return L
 
-def predic_total_signal(predics, fire_rate = 1/3):
+def predic_total_signal(predics, fire_rate = 1/3):    #prédiction du signal total à partir des prédictions de ses enregistrements coupés
 
   s = 0  
   for i in range(len(predics)):
       s += predics[i][0]
   return "Fire" if s > fire_rate*len(predics) else 'Not fire'
 
-def test():
+def test():    #test du modèle
   (test_X, test_y) = create_data_list("Test")
 
   L = predic(test_X, train())

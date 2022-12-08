@@ -10,27 +10,27 @@ from resize_db import resize_path
 from reseau_neurone import predic
 from reseau_neurone import predic_total_signal
 
-def load_file(path):
+def load_file(path):    #chargement du fichier audio
     sig, sr = torchaudio.load(path)
     return (sig, sr)
 
-def prepa(sig, sr):
+def prepa(sig, sr):     #préparation du signal pour répondre au format souhaité
     (i, j) = silence(sig[0, :])
     list_of_sounds=diviser_son(sig[0, i:j], sr, 4)
     return list_of_sounds
 
-def filtrage(sig):
+def filtrage(sig):      #filtrage du signal
     return filtre(sig)
 
-def spect(sig, sr, i):
+def spect(sig, sr, i):      #création du spectrogramme
     plotstft(sig, sr, plotpath='Main_specs/image_'+str(i)+'.png')
 
-def resize(i):
+def resize(i):    #redimensionnement du spectrogramme
     path = 'Main_specs/image_'+str(i)+'.png'
     resize_path(path)
     return np.asarray(Image.open(path))
 
-def load_model(model_choice):
+def load_model(model_choice):       #chargement du modèle
     if model_choice == "CNN":
         model = tf.keras.models.load_model("Saved_models/model.h5")
     elif model_choice == "SVM":
@@ -39,7 +39,7 @@ def load_model(model_choice):
         raise ValueError("Le choix de modèle n'est pas correct")
     return model
 
-if __name__ == "__main__":
+if __name__ == "__main__":  
     
     model_choice = input("Choice of model : CNN or SVM ")
     path_of_the_file = input("Path of the file ")
