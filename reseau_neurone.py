@@ -58,6 +58,6 @@ for i in range (len(predic)):
 
 cm = confusion_matrix(test_y, L)
 
-class_names = ['Pas feu', 'Feu']
+class_names = ['Negatif', 'Positif']
 
 show_confusion_matrix(cm, class_names)
