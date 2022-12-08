@@ -54,8 +54,7 @@ def logscale_spec(spec, sr=44100, factor=20.):
 """ plot spectrogram"""
 
 
-def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
-    samplerate, samples = wav.read(audiopath)
+def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
     s = stft(samples, binsize)
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
     ims = 20.*np.log10(np.abs(sshow)/10e-6)  # amplitude to decibel
@@ -82,8 +81,11 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
         plt.clf()
     return ims
 
+def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
+    samplerate, samples = wav.read(audiopath)
+    return plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet")
 
-ims = plotstft(
+ims = plot_with_path(
 "Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")
 
 
@@ -96,7 +98,7 @@ def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
     for fichier in tqdm(listd_dir_sorted[beg_index:]):
         fichier_nom=os.fsdecode(fichier)
         #print(fichier_nom)
-        plotstft(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
+        plot_with_path(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
 
 def get_beginning_ind(OUTPUT_DB_PATH):
     directory = os.fsencode(OUTPUT_DB_PATH)
