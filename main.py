@@ -8,6 +8,7 @@ from FILTRE import filtre
 from spectrogramme import plotstft
 from resize_db import resize_path
 from reseau_neurone import predic
+from reseau_neurone import predic_total_signal
 
 def load_file(path):
     sig, sr = torchaudio.load(path)
@@ -51,4 +52,4 @@ if __name__ == "__main__":
         specs.append(resize(i))
         pred.append(predic(specs[i].reshape(1, 289, 465, 3), load_model(model_choice)))
 
-    print(pred)
+    print(predic_total_signal(pred))

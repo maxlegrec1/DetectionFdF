@@ -57,6 +57,13 @@ def predic(signals, model):
         L[i] = list(np.array(predic[i])).index(max(np.array(predic[i])))
     return L
 
+def predic_total_signal(predics, fire_rate = 1/3):
+
+  s = 0  
+  for i in range(len(predics)):
+      s += predics[i][0]
+  return "Fire" if s > fire_rate*len(predics) else 'Not fire'
+
 def test():
   (test_X, test_y) = create_data_list("Test")
 
