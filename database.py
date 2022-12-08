@@ -74,13 +74,15 @@ def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échan
                 dst =f"{folder2}/{filename}"
                 os.rename(src,dst)
 
-def silence(data): #enlever les silences de début et de fin
+def silence(data):                  #enlever les silences de début et de fin
+    data = data[0]
     i = 0
-    while i < data.shape[0] and data[i].all == 0:
+    while i < len(data) and data[i] == 0:
         i +=1
-    j = data.shape[0]-1
-    while j > 0 and data[j].all == 0:
+    j = len(data)-1
+    while j > 0 and data[j] == 0:
         j -= j
+
     return (i, j)
 
 def diviser_son(data): #diviser un son trop long en plusieurs sons plus petits

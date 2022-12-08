@@ -11,7 +11,7 @@ def load_file(path):
     sig, sr = torchaudio.load(path)
     return (sig, sr)
 
-def prepa(sig):
+def prepa(sig, sr):
     (i, j) = silence(sig)
     list_of_sounds=diviser_son(sig[i:j])
     return list_of_sounds
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     path_of_the_file = input("Path of the file")
     (sound, sr) = load_file(path_of_the_file)
     print(sound)
-    prep_sounds = prepa(sound)
+    prep_sounds = prepa(sound, sr)
     print(prep_sounds)
 
     specs = []
