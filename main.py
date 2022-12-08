@@ -3,7 +3,7 @@ import torchaudio
 from database import silence, diviser_son
 import numpy as np
 from FILTRE import filtre
-from spectrogramme import stft, logscale_spec, plotstft
+from spectrogramme import plotstft
 from resize_db import resize_en_place
 from reseau_neurone import predic
 
@@ -12,8 +12,8 @@ def load_file(path):
     return (sig, sr)
 
 def prepa(sig):
-    sig = silence(sig)
-    list_of_sounds = diviser_son(sig)
+    (i, j) = silence(sig)
+    list_of_sounds=diviser_son(sig[i:j])
     return list_of_sounds
 
 def filtrage(sig):
@@ -39,13 +39,16 @@ if __name__ == "__main__":
     model_choice = input("Choice of model : CNN or SVM")
     path_of_the_file = input("Path of the file")
     (sound, sr) = load_file(path_of_the_file)
+    print(sound)
     prep_sounds = prepa(sound)
+    print(prep_sounds)
 
     specs = []
     for sound in prep_sounds:
         filtered = filtrage(sound)
         specs.append(resize(spect(filtered)))
-
+    if len(specs) == 0:
+        raise ValueError("Le fichier faisait moins de 4 secondes")
     pred = predic(specs, load_model(model_choice))
 
     print(pred)

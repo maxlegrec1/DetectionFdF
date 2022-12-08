@@ -85,8 +85,8 @@ def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     samplerate, samples = wav.read(audiopath)
     return plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet")
 
-ims = plot_with_path(
-"Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")
+"""ims = plot_with_path(
+"Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")"""
 
 
 def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
