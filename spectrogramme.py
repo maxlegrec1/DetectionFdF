@@ -107,8 +107,8 @@ def get_beginning_ind(OUTPUT_DB_PATH):
 
 
 if __name__=='__main__':
-    INPUT_DB_PATH="Dataset/Training"
-    OUTPUT_DB_PATH="Dataset_spec/Training"
+    INPUT_DB_PATH="Dataset/Test"
+    OUTPUT_DB_PATH="Dataset_spec/Test"
     start_index=get_beginning_ind(OUTPUT_DB_PATH)
     create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,start_index)
     print("done")

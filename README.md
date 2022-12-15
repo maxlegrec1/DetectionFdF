@@ -3,8 +3,10 @@ Ce github contient l'intégralité de notre code sur la detection de feux de for
 
 # Programmes
 
+Tous les scripts pythons doivent être executés depuis la racine du projet.
 ## main.py
 En entrée, choix du modèle et du fichier audio à classifier.
+Il faut entrer le PATH du fichier audio depuis la racine du projet.
 La sortie correspond à la classe du fichier audio (Fire, Not a fire).
 
 ## database.py
@@ -18,6 +20,7 @@ Permet de réaliser le spectrogramme d'un enregistrement sonore
 
 ## resize_db.py
 Diminue la taille du spectrogramme pour avoir des données d'entrée pour les modèles moins volumineuses, et sans les axes
+Les fichiers sont modifiés en place.
 
 ## reseau_neurone.py
 Réseau de neurones convolutif de classification d'images binaires, entraîné sur les feux, et sur les non-feux
