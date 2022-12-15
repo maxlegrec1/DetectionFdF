@@ -18,7 +18,7 @@ def train():                #création du modèle
 
   model = tf.keras.models.Sequential()
 
-  model.add(tf.keras.layers.MaxPooling2D(input_shape = (289,465,3)))
+  model.add(tf.keras.layers.MaxPooling2D(input_shape = (210,465,3)))
   model.add(tf.keras.layers.Conv2D(16, 3, activation = 'relu'))
   model.add(tf.keras.layers.MaxPooling2D())
   model.add(tf.keras.layers.Conv2D(16, 3, activation = 'relu'))
@@ -35,7 +35,7 @@ def train():                #création du modèle
 
   model.compile(optimizer = 'adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(), metrics = ['accuracy'])
 
-  history = model.fit(x = train_X, y = train_y, epochs = 1, batch_size = 128, validation_data = (val_X, val_Y))
+  history = model.fit(x = train_X, y = train_y, epochs = 3, batch_size = 128, validation_data = (val_X, val_Y))
 
   """plt.plot(history.history['accuracy'], label='accuracy')
   plt.plot(history.history['val_accuracy'], label='val_accuracy')

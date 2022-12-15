@@ -9,15 +9,22 @@ from spectrogramme import plotstft
 from resize_db import resize_path
 from reseau_neurone import predic
 from reseau_neurone import predic_total_signal
+import sys
 
 def load_file(path):    #chargement du fichier audio
     sig, sr = sf.read(path)
     return (sig, sr)
 
-def prepa(sig, sr):     #préparation du signal pour répondre au format souhaité
-    (i, j) = silence(sig[:,0])
-    print(i,j)
-    list_of_sounds=diviser_son(sig[i:j+1, 0], sr, 4)
+def prepa(sig, sr):
+    print(sig.shape)     #préparation du signal pour répondre au format souhaité
+    if len(sig.shape)>1:
+        (i, j) = silence(sig[:,0])
+        print(i,j)
+        list_of_sounds=diviser_son(sig[i:j+1, 0], sr, 4)
+    else:
+        (i, j) = silence(sig[:])
+        print(i,j)
+        list_of_sounds=diviser_son(sig[i:j+1], sr, 4)
     return list_of_sounds
 
 def filtrage(sig):      #filtrage du signal
@@ -42,8 +49,8 @@ def load_model(model_choice):       #chargement du modèle
 
 if __name__ == "__main__":  
     
-    model_choice = input("Choice of model : CNN or SVM ")
-    path_of_the_file = input("Path of the file ")
+    model_choice = sys.argv[1]
+    path_of_the_file = sys.argv[2]
     (sound, sr) = load_file(path_of_the_file)
     prep_sounds = prepa(sound, sr)
     specs, pred = [], []
@@ -51,6 +58,6 @@ if __name__ == "__main__":
         filtered = filtrage(prep_sounds[i])
         spect(filtered, sr, i)
         specs.append(resize(i))
-        pred.append(predic(specs[i].reshape(1, 289, 465, 3), load_model(model_choice)))
+        pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
 
     print(predic_total_signal(pred))
