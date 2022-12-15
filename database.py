@@ -77,10 +77,10 @@ def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échan
 def silence(data):                  #enlever les silences de début et de fin
     i = 0
     while i < len(data) and data[i] == 0:
-        i +=1
+        i += 1
     j = len(data)-1
     while j > 0 and data[j] == 0:
-        j -= j
+        j -= 1
 
     return (i, j)
 
