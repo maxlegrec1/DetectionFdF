@@ -21,7 +21,7 @@ def trier_bonne_longueur(x): #on supprime les sons ne faisant pas 4 secondes
                 dst =f"{folder2}/{filename}"
                 os.rename(src,dst)
 
-def rangement(x): #on tri les fichiers ne contenant pas de feu par classes
+def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
     folder="audio/fold"+str(x)
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
@@ -46,7 +46,7 @@ def distribution(x): #pour connaître la répartition selon les classes
         liste[int(fichier[1])]+=1
     print(liste)
 
-def nbre_bonne_freq(): #on regarde combien de sons dispose de la fréquence d'échantillonage souhaité
+def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'échantillonage souhaité
     choix=[0 for k in range(10)]
     for k in range(1,11):
         folder="audio/fold"+str(k)
@@ -128,8 +128,8 @@ def vider_poubelle(poubelle): #si on souhaite récuperer des fichiers
         dst =f"{folder2}{int(fichier[1])+1}/{filename}"
         os.rename(src,dst)
 
-def autre_to_dataset(liste): #on transfère les fichiers ne contenant pas du feu dans le dataset
-    #on prend en entrée une liste qui nous donne le nobre de sons a prendre par classe
+def autre_to_dataset(liste): #on transfère les fichiers ne contenant pas de feu dans le dataset
+    #on prend en entrée une liste qui nous donne le nombre de sons à prendre par classe
     folder2="Dataset"
     for k in range(1,11):
         nbre=liste[k-1]
@@ -173,13 +173,13 @@ def dataset_to_autre(): #Pour enlever les fichiers ne contenant pas de feu
             dst =f"{folder2}{int(fichier[1])+1}/{filename}"
             os.rename(src,dst)
 
-def delete_feu_dataset(): #on supprime les feu du dataset
+def delete_feu_dataset(): #on supprime les feux du dataset
     folder="Dataset/Validation"
     for count, filename in enumerate(os.listdir(folder)):
         if filename[:3]=="Feu":
             os.remove(f"{folder}/{filename}")
 
-def clear_dataset(): #on vide entierement le dataset
+def clear_dataset(): #on vide entièrement le dataset
     dataset_to_autre()
     delete_feu_dataset()
 
@@ -191,13 +191,13 @@ def check_dataset(folder,freq_echant,temps):
         data,samplerate=sf.read(f"{folder}/{filename}")
         if silence(data)!=(0,len(data)-1): #vérifie les silences
             sil+=1
-        if samplerate!=freq_echant: #vérifie la fréquence d'échantillonage
+        if samplerate!=freq_echant: #vérifie la fréquence d'échantillonnage
             freq+=1
         if len(data)!=temps*freq_echant: #vérifie le temps des enregistrements
             tem+=1
-        if filename[:3]=="Feu": #compte le nombre de feu
+        if filename[:3]=="Feu": #compte le nombre de feux
             feu+=1
-        if filename[:3]=="Aut": #vérifie le nombre de pas feu 
+        if filename[:3]=="Aut": #vérifie le nombre de non feux
             autre+=1
         if filename[:3]!="Feu" and filename[:3]!="Aut": #vérifie le nom des fichiers
             nom+=1
@@ -212,11 +212,11 @@ def check_dataset(folder,freq_echant,temps):
     if ext!=0:
         print("Il y a "+str(ext)+" fichiers qui ne finissent pas en .wav")
     if nom!=0:
-        print("Il y a "+str(nom)+" fichiers qui ne sont pas rennomé correctement")
+        print("Il y a "+str(nom)+" fichiers qui ne sont pas rennommés correctement")
     if tem!=0:
         print("Il y a "+str(tem)+" sons qui n'ont pas la bonne durée")
     if freq!=0:
-        print("Il y a "+str(freq)+" sons qui ne sont pas à la bonne fréquence d'échantillonage")
+        print("Il y a "+str(freq)+" sons qui ne sont pas à la bonne fréquence d'échantillonnage")
     if sil!=0:
         print("Il y a "+str(sil)+" sons contenants des silences au début ou à la fin")
     print("La proportion feu/pas feu est de "+str(feu)+"/"+str(autre))
@@ -259,8 +259,8 @@ def vider_training_val_test():
             os.rename(src,dst)
 
 
-def autre_to_dataset2(liste): #on transfère les fichiers ne contenant pas du feu dans le dataset
-    #on prend en entrée une liste qui nous donne le nobre de sons a prendre par classe
+def autre_to_dataset2(liste): #on transfère les fichiers ne contenant pas de feu dans le dataset
+    #on prend en entrée une liste qui nous donne le nombre de sons à prendre par classe
     folder2="Dataset"
     for k in range(1,11):
         nbre=liste[k-1]
@@ -284,7 +284,7 @@ def autre_to_dataset2(liste): #on transfère les fichiers ne contenant pas du fe
 choix2=[400,175,559,408,400,400,16,400,400,400]
 
 
-def feu_to_dataset2(): #on transfere les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
+def feu_to_dataset2(): #on transfère les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
     for count, filename in enumerate(os.listdir("Feu")):
         name=filename.split('_',2)
         if int(name[1][:-4])<=50:
