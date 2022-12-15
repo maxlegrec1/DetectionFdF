@@ -1,5 +1,6 @@
 import tensorflow as tf
 import torchaudio
+import soundfile as sf
 import cv2 as cv
 import numpy as np
 from PIL import Image
@@ -11,12 +12,12 @@ from reseau_neurone import predic
 from reseau_neurone import predic_total_signal
 
 def load_file(path):    #chargement du fichier audio
-    sig, sr = torchaudio.load(path)
+    sig, sr = sf.read(path)
     return (sig, sr)
 
 def prepa(sig, sr):     #préparation du signal pour répondre au format souhaité
-    (i, j) = silence(sig[0, :])
-    list_of_sounds=diviser_son(sig[0, i:j], sr, 4)
+    (i, j) = silence(sig[:,0])
+    list_of_sounds=diviser_son(sig[i:j, 0], sr, 4)
     return list_of_sounds
 
 def filtrage(sig):      #filtrage du signal

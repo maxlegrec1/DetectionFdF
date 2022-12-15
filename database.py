@@ -97,7 +97,7 @@ def feu_to_dataset(): #on transfere les sons contenant du feu dans le dataset (e
     for count, filename in enumerate(os.listdir("Feu")):
         print(count)
         data,samplerate=sf.read(f"Feu/{filename}")
-        (i,j)=silence(data[0, :])
+        (i,j)=silence(data[:,0])
         signaux=diviser_son(data[i:j])
         for k in range(len(signaux)):
             wavio.write(f"Dataset/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
@@ -189,7 +189,7 @@ def check_dataset(folder,freq_echant,temps):
     sil,freq,tem,feu,autre,nom,ext,mono=0,0,0,0,0,0,0,0
     for count, filename in enumerate(os.listdir(folder)):
         data,samplerate=sf.read(f"{folder}/{filename}")
-        if silence(data)!=(0,len(data)-1): #vérifie les silences
+        if silence(data[:,0])!=(0,len(data)-1): #vérifie les silences
             sil+=1
         if samplerate!=freq_echant: #vérifie la fréquence d'échantillonnage
             freq+=1
@@ -294,7 +294,7 @@ def feu_to_dataset2(): #on transfère les sons contenant du feu dans le dataset 
         else:
             folder="Dataset/Test"
         data,samplerate=sf.read(f"Feu/{filename}")
-        (i,j)=silence(data)
+        (i,j)=silence(data[:,0])
         signaux=diviser_son(data[i:j])
         for k in range(len(signaux)):
             wavio.write(f"{folder}/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
