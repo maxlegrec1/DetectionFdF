@@ -80,7 +80,7 @@ def silence(data):                  #enlever les silences de début et de fin
         i +=1
     j = len(data)-1
     while j > 0 and data[j] == 0:
-        j -= j
+        j -= 1
 
     return (i, j)
 

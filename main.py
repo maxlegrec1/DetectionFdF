@@ -17,11 +17,12 @@ def load_file(path):    #chargement du fichier audio
 
 def prepa(sig, sr):     #préparation du signal pour répondre au format souhaité
     (i, j) = silence(sig[:,0])
-    list_of_sounds=diviser_son(sig[i:j, 0], sr, 4)
+    print(i,j)
+    list_of_sounds=diviser_son(sig[i:j+1, 0], sr, 4)
     return list_of_sounds
 
 def filtrage(sig):      #filtrage du signal
-    return filtre(sig)
+    return sig
 
 def spect(sig, sr, i):      #création du spectrogramme
     plotstft(sig, sr, plotpath='Main_specs/image_'+str(i)+'.png')

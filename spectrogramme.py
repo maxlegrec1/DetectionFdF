@@ -1,4 +1,4 @@
-
+import soundfile as sf
 import numpy as np
 from matplotlib import pyplot as plt
 import scipy.io.wavfile as wav
@@ -82,8 +82,9 @@ def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
     return ims
 
 def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
-    samplerate, samples = wav.read(audiopath)
-    return plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet")
+    samples, samplerate = sf.read(audiopath)
+    samples=samples[:,0]
+    return plotstft(samples, samplerate, binsize=2**10, plotpath=plotpath, colormap="jet")
 
 """ims = plot_with_path(
 "Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")"""
@@ -108,7 +109,7 @@ def get_beginning_ind(OUTPUT_DB_PATH):
 
 if __name__=='__main__':
     INPUT_DB_PATH="Dataset/Training"
-    OUTPUT_DB_PATH='Dataset_spec/Training'
+    OUTPUT_DB_PATH="Dataset_spec/Training"
     start_index=get_beginning_ind(OUTPUT_DB_PATH)
     create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,start_index)
     print("done")
