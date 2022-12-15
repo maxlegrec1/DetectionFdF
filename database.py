@@ -77,7 +77,7 @@ def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échan
 def silence(data):                  #enlever les silences de début et de fin
     i = 0
     while i < len(data) and data[i] == 0:
-        i +=1
+        i += 1
     j = len(data)-1
     while j > 0 and data[j] == 0:
         j -= 1
@@ -98,7 +98,7 @@ def feu_to_dataset(): #on transfere les sons contenant du feu dans le dataset (e
         print(count)
         data,samplerate=sf.read(f"Feu/{filename}")
         (i,j)=silence(data[:,0])
-        signaux=diviser_son(data[i:j])
+        signaux=diviser_son(data[i:j+1])
         for k in range(len(signaux)):
             wavio.write(f"Dataset/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
 
@@ -295,7 +295,7 @@ def feu_to_dataset2(): #on transfère les sons contenant du feu dans le dataset 
             folder="Dataset/Test"
         data,samplerate=sf.read(f"Feu/{filename}")
         (i,j)=silence(data[:,0])
-        signaux=diviser_son(data[i:j])
+        signaux=diviser_son(data[i:j+1])
         for k in range(len(signaux)):
             wavio.write(f"{folder}/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
 

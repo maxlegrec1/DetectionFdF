@@ -1,5 +1,4 @@
 import tensorflow as tf
-import torchaudio
 import soundfile as sf
 import cv2 as cv
 import numpy as np
