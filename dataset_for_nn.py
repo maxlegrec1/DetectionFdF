@@ -1,8 +1,6 @@
 # import the modules
 import os
-from os import listdir
 from PIL import Image
-import matplotlib.pyplot as plt
 import numpy as np
  
 # get the path/directory

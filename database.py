@@ -1,8 +1,5 @@
 import os 
 import soundfile as sf
-import scipy.fftpack
-import matplotlib.pyplot as plt
-import numpy as np
 import wavio
 
 
