@@ -1,5 +1,4 @@
 import tensorflow as tf
-import torchaudio
 import soundfile as sf
 import cv2 as cv
 import numpy as np
@@ -17,7 +16,7 @@ def load_file(path):    #chargement du fichier audio
 
 def prepa(sig, sr):     #préparation du signal pour répondre au format souhaité
     (i, j) = silence(sig[:,0])
-    list_of_sounds=diviser_son(sig[i:j, 0], sr, 4)
+    list_of_sounds=diviser_son(sig[i:j+1, 0], sr, 4)
     return list_of_sounds
 
 def filtrage(sig):      #filtrage du signal
