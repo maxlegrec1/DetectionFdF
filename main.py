@@ -21,6 +21,7 @@ def prepa(sig, sr):     #préparation du signal pour répondre au format souhait
     return list_of_sounds
 
 def filtrage(sig):      #filtrage du signal
+    sig = filtre(sig)
     return sig
 
 def spect(sig, sr, i):      #création du spectrogramme

@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import tensorflow as tf
 from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
