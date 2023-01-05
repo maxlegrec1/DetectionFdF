@@ -61,7 +61,7 @@ def predic_total_signal(predics, fire_rate = 1/3):    #prédiction du signal tot
   s = 0  
   for i in range(len(predics)):
       s += predics[i][0]
-  return "Fire" if s > fire_rate*len(predics) else 'Not fire'
+  return "a fire" if s > fire_rate*len(predics) else 'not a fire'
 
 def test():    #test du modèle
   (test_X, test_y) = create_data_list("Test")

@@ -10,6 +10,7 @@ from resize_db import resize_path
 from reseau_neurone import predic
 from reseau_neurone import predic_total_signal
 import sys
+import ctypes
 
 def load_file(path):    #chargement du fichier audio
     sig, sr = sf.read(path)
@@ -62,3 +63,4 @@ if __name__ == "__main__":
         pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
 
     print(predic_total_signal(pred))
+    ctypes.windll.user32.MessageBoxW(0, "This audio sample is " + predic_total_signal(pred), "Prediction", 0)
