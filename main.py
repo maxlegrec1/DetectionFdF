@@ -62,7 +62,7 @@ if __name__ == "__main__":
         specs.append(resize(i))
         pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
 
-    print(predic_total_signal(pred))
+    ctypes.windll.user32.MessageBoxW(0, "This audio sample is " + predic_total_signal(pred), "Prediction", 0)
 
 
 def execute(path_of_the_file, model_choice):
