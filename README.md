@@ -1,6 +1,8 @@
 # DetectionFdF
 Ce github contient l'intégralité de notre code sur la detection de feux de forêt.
 
+Pour exécuter le code, il faut se placer dans le dossier DetectionFdF, et utiliser la commande `py main.py model file_path` pour lancer le programme principal, avec comme modèle CNN ou SVM suivant le modèle voulu, et comme file_path le chemin du fichier audio à classifier, depuis DetectionFdF.
+
 # Programmes
 
 Tous les scripts pythons doivent être executés depuis la racine du projet.
