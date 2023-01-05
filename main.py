@@ -28,7 +28,7 @@ def prepa(sig, sr):
     return list_of_sounds
 
 def filtrage(sig):      #filtrage du signal
-    sig = filtre(sig)
+    #sig = filtre(sig)
     return sig
 
 def spect(sig, sr, i):      #création du spectrogramme
@@ -62,3 +62,15 @@ if __name__ == "__main__":
         pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
 
     print(predic_total_signal(pred))
+
+
+def execute(path_of_the_file, model_choice):
+    (sound, sr) = load_file(path_of_the_file)
+    prep_sounds = prepa(sound, sr)
+    specs, pred = [], []
+    for i in range(len(prep_sounds)):
+        filtered = filtrage(prep_sounds[i])
+        spect(filtered, sr, i)
+        specs.append(resize(i))
+        pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
+    return predic_total_signal(pred)
