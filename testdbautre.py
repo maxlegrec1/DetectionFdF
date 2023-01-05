@@ -1,7 +1,7 @@
 from main import execute
 import os
 
-DB_TEST = "Dataset_Jagawana"
+DB_TEST = "dataset_fire_esc50"
 
 if __name__ == "__main__":
     counter=0
@@ -10,6 +10,6 @@ if __name__ == "__main__":
             print(WAVFILE)
             pred=execute(DB_TEST + "/" + WAVFILE, "CNN")
             print(pred)
-            if pred=="Fire":
+            if pred=="a fire":
                 counter+=1
     print("pourcentage de feux détectés : ", counter/len(os.listdir(DB_TEST)))
