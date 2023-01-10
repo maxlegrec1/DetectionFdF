@@ -11,6 +11,9 @@ from reseau_neurone import predic
 from reseau_neurone import predic_total_signal
 import sys
 import ctypes
+import pickle
+from SVM import predic_svm
+import os
 
 def load_file(path):    #chargement du fichier audio
     sig, sr = sf.read(path)
@@ -44,7 +47,7 @@ def load_model(model_choice):       #chargement du modèle
     if model_choice == "CNN":
         model = tf.keras.models.load_model("Saved_models/model.h5")
     elif model_choice == "SVM":
-        raise ValueError("Pas encore implémenté")
+        model = pickle.load(open('SVM_1.sav','rb'))
     else:
         raise ValueError("Le choix de modèle n'est pas correct")
     return model
@@ -66,12 +69,27 @@ if __name__ == "__main__":
 
 
 def execute(path_of_the_file, model_choice):
-    (sound, sr) = load_file(path_of_the_file)
-    prep_sounds = prepa(sound, sr)
-    specs, pred = [], []
-    for i in range(len(prep_sounds)):
-        filtered = filtrage(prep_sounds[i])
-        spect(filtered, sr, i)
-        specs.append(resize(i))
-        pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
-    return predic_total_signal(pred)
+    if model_choice == "CNN":
+        (sound, sr) = load_file(path_of_the_file)
+        prep_sounds = prepa(sound, sr)
+        specs, pred = [], []
+        for i in range(len(prep_sounds)):
+            filtered = filtrage(prep_sounds[i])
+            spect(filtered, sr, i)
+            specs.append(resize(i))
+            pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
+        return predic_total_signal(pred)
+    elif model_choice == "SVM":
+        (sound, sr) = load_file(path_of_the_file)
+        prep_sounds = prepa(sound, sr)
+        predicts=[]
+        for i in range(len(prep_sounds)):
+            filtered = filtrage(prep_sounds[i])
+            #write the filtered sound as the "ith" wav in the temp folder
+            sf.write("temp/"+str(i)+".wav", filtered, sr)
+            predicts.append(predic_svm("temp/"+str(i)+".wav", load_model(model_choice)))
+        #clear the temp folder
+        for i in range(len(prep_sounds)):
+            os.remove("temp/"+str(i)+".wav")
+        return predic_total_signal(predicts)
+
