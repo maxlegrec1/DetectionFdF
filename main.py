@@ -58,15 +58,26 @@ if __name__ == "__main__":
     path_of_the_file = sys.argv[2]
     (sound, sr) = load_file(path_of_the_file)
     prep_sounds = prepa(sound, sr)
-    specs, pred = [], []
-    for i in range(len(prep_sounds)):
-        filtered = filtrage(prep_sounds[i])
-        spect(filtered, sr, i)
-        specs.append(resize(i))
-        pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
+    if model_choice == "CNN":
+        specs, pred = [], []
+        for i in range(len(prep_sounds)):
+            filtered = filtrage(prep_sounds[i])
+            spect(filtered, sr, i)
+            specs.append(resize(i))
+            pred.append(predic(specs[i].reshape(1, 210, 465, 3), load_model(model_choice)))
 
-    ctypes.windll.user32.MessageBoxW(0, "This audio sample is " + predic_total_signal(pred), "Prediction", 0)
-
+        ctypes.windll.user32.MessageBoxW(0, "This audio sample is " + predic_total_signal(pred), "Prediction", 0)
+    elif model_choice == "SVM":
+        predicts=[]
+        for i in range(len(prep_sounds)):
+            filtered = filtrage(prep_sounds[i])
+            #write the filtered sound as the "ith" wav in the temp folder
+            sf.write("temp/"+str(i)+".wav", filtered, sr)
+            predicts.append(predic_svm("temp/"+str(i)+".wav", load_model(model_choice)))
+        #clear the temp folder
+        for i in range(len(prep_sounds)):
+            os.remove("temp/"+str(i)+".wav")
+        ctypes.windll.user32.MessageBoxW(0, "This audio sample is " + predic_total_signal(predicts), "Prediction", 0)
 
 def execute(path_of_the_file, model_choice):
     if model_choice == "CNN":
