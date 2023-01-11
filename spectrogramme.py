@@ -70,9 +70,10 @@ def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
     plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
     if plotpath:
         plt.savefig(plotpath, bbox_inches="tight")
+        plt.close()
     else:
         #plt.show()
-        plt.clf()
+        plt.close()
     return ims
 
 #plot spectrogram from audio file
