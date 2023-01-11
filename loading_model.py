@@ -4,8 +4,10 @@ from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
+#charge le modèle
 model = tf.keras.models.load_model("Saved_models/model.h5")
 
+#test du modèle
 (test_X, test_y) = create_data_list("Test")
 
 predic = model(test_X)

@@ -35,3 +35,6 @@ Programme permettant de réaliser une matrice de confusion permettant de visuali
 
 ## loading_model.py
 Programme permettant de charger un modèle pré-saved pour évaluer ses performances sur des données test
+
+## svm.py
+Programme permettant d'entraîner un modèle SVM sur les données d'entrainement, et de l'utiliser pour prédire les classes des données test

@@ -3,6 +3,8 @@ import os
 from tqdm import tqdm
 import numpy as np
 
+#resize l'image en place, les dimensions sont choisies au vu du format du spectrogramme pour ne garder que 
+#la partie du spectrogramme correspondant aux fréquences qui nous intéressent (critère de Shannon)
 def resize_en_place(image):
     resized=image[172:593,105:1035]
     scale_percent = 50 # percent of original size
@@ -12,12 +14,13 @@ def resize_en_place(image):
     
     return cv.resize(resized,dim,interpolation=cv.INTER_AREA)
     
-
+# récupère le path pour modifier l'image et la réupload au même endroit
 def resize_path(image_path):
     image= cv.imread(image_path)
     resized = resize_en_place(image)
     cv.imwrite(image_path,resized)
 
+# parcours le dossier et applique la fonction resize_path à chaque image
 def transform_db(INPUT_DB_PATH):
     directory = os.fsencode(INPUT_DB_PATH)
     listd_dir=os.listdir(directory)

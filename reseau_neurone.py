@@ -36,14 +36,6 @@ def train():                #création du modèle
 
   history = model.fit(x = train_X, y = train_y, epochs = 3, batch_size = 128, validation_data = (val_X, val_Y))
 
-  """plt.plot(history.history['accuracy'], label='accuracy')
-  plt.plot(history.history['val_accuracy'], label='val_accuracy')
-  plt.xlabel('Epoch')
-  plt.ylabel('Accuracy')
-  plt.ylim([0, 1])
-  plt.legend(loc='lower right')
-  plt.show()"""
-
   model.save("Saved_models/model.h5")
   return model
 

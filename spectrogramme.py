@@ -5,9 +5,8 @@ import scipy.io.wavfile as wav
 from numpy.lib import stride_tricks
 import os
 from tqdm import tqdm
-""" short time fourier transform of audio signal """
 
-
+#short time fourier transform of audio signal
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     win = window(frameSize)
     hopSize = int(frameSize - np.floor(overlapFac * frameSize))
@@ -23,9 +22,7 @@ def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     return np.fft.rfft(frames)
 
 
-""" scale frequency axis logarithmically """
-
-
+#scale frequency axis logarithmically
 def logscale_spec(spec, sr=44100, factor=20.):
     timebins, freqbins = np.shape(spec)
     scale = np.linspace(0, 1, freqbins) ** factor
@@ -50,9 +47,7 @@ def logscale_spec(spec, sr=44100, factor=20.):
     return newspec, freqs
 
 
-""" plot spectrogram"""
-
-
+#plot spectrogram
 def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
     s = stft(samples, binsize)
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
@@ -80,6 +75,7 @@ def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
         plt.clf()
     return ims
 
+#plot spectrogram from audio file
 def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     samples, samplerate = sf.read(audiopath)
     samples=samples[:,0]
@@ -88,7 +84,7 @@ def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
 """ims = plot_with_path(
 "Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")"""
 
-
+#create spectrogram database
 def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
     directory = os.fsencode(INPUT_DB_PATH)
     listd_dir=os.listdir(directory)
@@ -100,6 +96,7 @@ def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
         #print(fichier_nom)
         plot_with_path(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
 
+#return the index of the first file to be processed
 def get_beginning_ind(OUTPUT_DB_PATH):
     directory = os.fsencode(OUTPUT_DB_PATH)
     index=len(os.listdir(directory))

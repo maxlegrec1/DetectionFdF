@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Fonction qui affiche la matrice de confusion
 def show_confusion_matrix(matrix, labels):
     fig, ax = plt.subplots(figsize=(10,10))
     im = ax.imshow(matrix)
