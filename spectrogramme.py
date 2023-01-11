@@ -1,14 +1,12 @@
-
+import soundfile as sf
 import numpy as np
 from matplotlib import pyplot as plt
 import scipy.io.wavfile as wav
 from numpy.lib import stride_tricks
-import sys
 import os
 from tqdm import tqdm
-""" short time fourier transform of audio signal """
 
-
+#short time fourier transform of audio signal
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     win = window(frameSize)
     hopSize = int(frameSize - np.floor(overlapFac * frameSize))
@@ -24,9 +22,7 @@ def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     return np.fft.rfft(frames)
 
 
-""" scale frequency axis logarithmically """
-
-
+#scale frequency axis logarithmically
 def logscale_spec(spec, sr=44100, factor=20.):
     timebins, freqbins = np.shape(spec)
     scale = np.linspace(0, 1, freqbins) ** factor
@@ -51,11 +47,8 @@ def logscale_spec(spec, sr=44100, factor=20.):
     return newspec, freqs
 
 
-""" plot spectrogram"""
-
-
-def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
-    samplerate, samples = wav.read(audiopath)
+#plot spectrogram
+def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
     s = stft(samples, binsize)
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
     ims = 20.*np.log10(np.abs(sshow)/10e-6)  # amplitude to decibel
@@ -78,15 +71,20 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     if plotpath:
         plt.savefig(plotpath, bbox_inches="tight")
     else:
-        plt.show()
+        #plt.show()
         plt.clf()
     return ims
 
+#plot spectrogram from audio file
+def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
+    samples, samplerate = sf.read(audiopath)
+    samples=samples[:,0]
+    return plotstft(samples, samplerate, binsize=2**10, plotpath=plotpath, colormap="jet")
 
-ims = plotstft(
-"Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")
+"""ims = plot_with_path(
+"Dataset/Training/Autre13230-0-0-1.wav",plotpath="Dataset_spec/Training/Autre13230-0-0-1.jpg")"""
 
-
+#create spectrogram database
 def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
     directory = os.fsencode(INPUT_DB_PATH)
     listd_dir=os.listdir(directory)
@@ -96,8 +94,9 @@ def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
     for fichier in tqdm(listd_dir_sorted[beg_index:]):
         fichier_nom=os.fsdecode(fichier)
         #print(fichier_nom)
-        plotstft(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
+        plot_with_path(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
 
+#return the index of the first file to be processed
 def get_beginning_ind(OUTPUT_DB_PATH):
     directory = os.fsencode(OUTPUT_DB_PATH)
     index=len(os.listdir(directory))
@@ -105,8 +104,8 @@ def get_beginning_ind(OUTPUT_DB_PATH):
 
 
 if __name__=='__main__':
-    INPUT_DB_PATH="Dataset/Training"
-    OUTPUT_DB_PATH='Dataset_spec/Training'
+    INPUT_DB_PATH="Dataset/Test"
+    OUTPUT_DB_PATH="Dataset_spec/Test"
     start_index=get_beginning_ind(OUTPUT_DB_PATH)
     create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,start_index)
     print("done")

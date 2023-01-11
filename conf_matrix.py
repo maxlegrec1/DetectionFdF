@@ -1,16 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Fonction qui affiche la matrice de confusion
 def show_confusion_matrix(matrix, labels):
     fig, ax = plt.subplots(figsize=(10,10))
     im = ax.imshow(matrix)
     
     N = len(labels)
 
-    # We want to show all ticks...
     ax.set_xticks(np.arange(N))
     ax.set_yticks(np.arange(N))
-    # ... and label them with the respective list entries
     ax.set_xticklabels(labels)
     ax.set_yticklabels(labels)
 
