@@ -29,10 +29,10 @@ def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
         print(int(fichier[1]))
 
 def rennomer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
-    folder="./Nature2"
+    folder="./dataset_fire_esc50"
     for count, filename in enumerate(os.listdir(folder)):
         src =f"{folder}/{filename}"
-        dst =f"{folder}/Autre{filename}"
+        dst =f"{folder}/Feu{filename}"
         os.rename(src,dst)
 #rennomer_autre()
 

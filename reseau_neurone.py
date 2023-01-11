@@ -34,9 +34,9 @@ def train():                #création du modèle
 
   model.compile(optimizer = 'adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(), metrics = ['accuracy'])
 
-  history = model.fit(x = train_X, y = train_y, epochs = 3, batch_size = 128, validation_data = (val_X, val_Y))
+  history = model.fit(x = train_X, y = train_y, epochs = 4, batch_size = 128, validation_data = (val_X, val_Y))
 
-  model.save("Saved_models/model.h5")
+  model.save("Saved_models/model2.h5")
   return model
 
 def predic(signals, model):     #prédiction des données

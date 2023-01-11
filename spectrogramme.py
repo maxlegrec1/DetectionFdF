@@ -5,6 +5,8 @@ import scipy.io.wavfile as wav
 from numpy.lib import stride_tricks
 import os
 from tqdm import tqdm
+import random
+from FILTRE import filtre
 
 #short time fourier transform of audio signal
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
@@ -80,6 +82,11 @@ def plotstft(samples, samplerate, binsize=2**10, plotpath=None, colormap="jet"):
 def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     samples, samplerate = sf.read(audiopath)
     samples=samples[:,0]
+    #if random>1/2: filter samples
+
+    if random.random()>1/2:
+        samples=filtre(samples)
+    
     return plotstft(samples, samplerate, binsize=2**10, plotpath=plotpath, colormap="jet")
 
 """ims = plot_with_path(
@@ -95,8 +102,10 @@ def create_spec_db(INPUT_DB_PATH,OUTPUT_DB_PATH,beg_index):
     for fichier in tqdm(listd_dir_sorted[beg_index:]):
         fichier_nom=os.fsdecode(fichier)
         #print(fichier_nom)
-        plot_with_path(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
-
+        try:
+            plot_with_path(INPUT_DB_PATH+"/"+fichier_nom,plotpath=OUTPUT_DB_PATH+"/"+fichier_nom[:-4]+".jpg")
+        except:
+            print('erreur')
 #return the index of the first file to be processed
 def get_beginning_ind(OUTPUT_DB_PATH):
     directory = os.fsencode(OUTPUT_DB_PATH)

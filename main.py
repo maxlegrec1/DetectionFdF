@@ -45,7 +45,7 @@ def resize(i):    #redimensionnement du spectrogramme
 
 def load_model(model_choice):       #chargement du modèle
     if model_choice == "CNN":
-        model = tf.keras.models.load_model("Saved_models/model.h5")
+        model = tf.keras.models.load_model("Saved_models/model2.h5")
     elif model_choice == "SVM":
         model = pickle.load(open('SVM_1.sav','rb'))
     else:
