@@ -28,12 +28,13 @@ def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
         os.rename(src,dst)
         print(int(fichier[1]))
 
-def rennomer_autre(x): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
-    folder="audio/fold"+str(x)
+def rennomer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
+    folder="./Nature2"
     for count, filename in enumerate(os.listdir(folder)):
         src =f"{folder}/{filename}"
         dst =f"{folder}/Autre{filename}"
         os.rename(src,dst)
+#rennomer_autre()
 
 def distribution(x): #pour connaître la répartition selon les différentes classes 
     folder="audio/fold"+str(x)

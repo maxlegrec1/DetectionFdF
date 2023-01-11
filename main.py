@@ -20,10 +20,10 @@ def load_file(path):    #chargement du fichier audio
     return (sig, sr)
 
 def prepa(sig, sr):
-    print(sig.shape)     #préparation du signal pour répondre au format souhaité
+    #print(sig.shape)     #préparation du signal pour répondre au format souhaité
     if len(sig.shape)>1:
         (i, j) = silence(sig[:,0])
-        print(i,j)
+        #print(i,j)
         list_of_sounds=diviser_son(sig[i:j+1, 0], sr, 4)
     else:
         (i, j) = silence(sig[:])
