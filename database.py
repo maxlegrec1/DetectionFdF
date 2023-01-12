@@ -9,11 +9,11 @@ audio_duration=4
 def trier_bonne_longueur(x): #on supprime de la base de données les sons ne faisant pas 4 secondes
     folder="audio/fold"+str(x)
     folder2="audio/poubelle"
-    for count, filename in enumerate(os.listdir(folder)):
+    for _, filename in enumerate(os.listdir(folder)):
             audio,samplerates=sf.read(f"{folder}/{filename}")
             temps=len(audio)/samplerates
             if temps!=4:
-                print("c nul")
+                print("Erreur de temps")
                 src =f"{folder}/{filename}"  
                 dst =f"{folder2}/{filename}"
                 os.rename(src,dst)
@@ -28,13 +28,13 @@ def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
         os.rename(src,dst)
         print(int(fichier[1]))
 
-def rennomer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
+def renommer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
     folder="./Nature2"
     for count, filename in enumerate(os.listdir(folder)):
         src =f"{folder}/{filename}"
         dst =f"{folder}/Autre{filename}"
         os.rename(src,dst)
-#rennomer_autre()
+#renommer_autre()
 
 def distribution(x): #pour connaître la répartition selon les différentes classes 
     folder="audio/fold"+str(x)
