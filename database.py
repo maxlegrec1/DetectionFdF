@@ -6,7 +6,7 @@ import wavio
 sample_freq=44100
 audio_duration=4
 
-def trier_bonne_longueur(x): #on supprime de la base de donnée les sons ne faisant pas 4 secondes
+def trier_bonne_longueur(x): #on supprime de la base de données les sons ne faisant pas 4 secondes
     folder="audio/fold"+str(x)
     folder2="audio/poubelle"
     for count, filename in enumerate(os.listdir(folder)):
@@ -28,9 +28,9 @@ def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
         os.rename(src,dst)
         print(int(fichier[1]))
 
-def rennomer_autre(x): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
+def renommer_autre(x): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
     folder="audio/fold"+str(x)
-    for count, filename in enumerate(os.listdir(folder)):
+    for _, filename in enumerate(os.listdir(folder)):
         src =f"{folder}/{filename}"
         dst =f"{folder}/Autre{filename}"
         os.rename(src,dst)
@@ -43,7 +43,7 @@ def distribution(x): #pour connaître la répartition selon les différentes cla
         liste[int(fichier[1])]+=1
     print(liste)
 
-def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'échantillonage souhaité
+def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'échantillonage souhaitée
     choix=[0 for k in range(10)]
     for k in range(1,11):
         folder="audio/fold"+str(k)
@@ -58,7 +58,7 @@ def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'
         choix[k-1]=nbre
     print(choix)
 
-def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échantillonage de 44 100 
+def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échantillonage de 44 100 Hz
     for k in range(1,11):
         folder="audio/fold"+str(k)
         folder2="audio/poubelle_freq"
@@ -90,7 +90,7 @@ def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): #divis
     else:
         return []
 
-def feu_to_dataset(): #on transfere les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
+def feu_to_dataset(): #on transfère les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
     for count, filename in enumerate(os.listdir("Feu")):
         print(count)
         data,samplerate=sf.read(f"Feu/{filename}")
@@ -101,7 +101,7 @@ def feu_to_dataset(): #on transfere les sons contenant du feu dans le dataset (e
 
 choix_final=[400, 175, 567, 435, 400, 400, 16, 400, 400, 400]
 
-def trier_mono(): #on enleve les fichiers qui ne sont pas en stereo
+def trier_mono(): #on enlève les fichiers qui ne sont pas en stereo
     folder2="audio/poubelle_mono"
     for k in range(1,11):
         folder="audio/fold"+str(k)
@@ -116,7 +116,7 @@ def trier_mono(): #on enleve les fichiers qui ne sont pas en stereo
 
 stereos=[640, 175, 559, 408, 468, 450, 16, 454, 403, 654] #nombre de fichiers en stéréo par classes
 
-def vider_poubelle(poubelle): #si on souhaite récuperer des fichiers
+def vider_poubelle(poubelle): #si on souhaite récupérer des fichiers
     folder="audio/"+poubelle
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
@@ -210,19 +210,19 @@ def check_dataset(folder,freq_echant,temps):
     if ext!=0:
         print("Il y a "+str(ext)+" fichiers qui ne finissent pas en .wav")
     if nom!=0:
-        print("Il y a "+str(nom)+" fichiers qui ne sont pas rennommés correctement")
+        print("Il y a "+str(nom)+" fichiers qui ne sont pas renommés correctement")
     if tem!=0:
         print("Il y a "+str(tem)+" sons qui n'ont pas la bonne durée")
     if freq!=0:
         print("Il y a "+str(freq)+" sons qui ne sont pas à la bonne fréquence d'échantillonnage")
     if sil!=0:
-        print("Il y a "+str(sil)+" sons contenants des silences au début ou à la fin")
+        print("Il y a "+str(sil)+" sons contenant des silences au début ou à la fin")
     print("La proportion feu/pas feu est de "+str(feu)+"/"+str(autre))
     print("fin")
 
 #check_dataset("DetectionFdF/Dataset",44100,4)
 
-def training_val_test(): #On divise le dataset en trois (Taining/Validation/Test)
+def training_val_test(): #On divise le dataset en trois (Training/Validation/Test)
     Feu,Autre=3455,3564
     folder="Dataset"
     list=["Training","Validation","Test"]
