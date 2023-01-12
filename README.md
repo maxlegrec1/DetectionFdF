@@ -1,6 +1,10 @@
 # DetectionFdF
 Ce github contient l'intégralité de notre code sur la detection de feux de forêt.
 
+Il permet de réaliser la classification de fichiers audio en deux classes : Feu de forêt, et Non-feu de forêt.
+L'utilisation de modèles sauvegardés au préalable permet la prédiction rapide de la classe d'un fichier audio, permettant de déterminer si un enregistrement en direct est un feu de forêt ou non.
+L'utilisation de 2 modèles différents (CNN et SVM) permet de comparer les prédictions des 2 modèles pour augmenter la précision de la prédiction effectuée.
+
 Pour exécuter le code, il faut se placer dans le dossier DetectionFdF, et utiliser la commande `py main.py model file_path` pour lancer le programme principal, avec comme modèle CNN ou SVM suivant le modèle voulu, et comme file_path le chemin du fichier audio à classifier, depuis DetectionFdF.
 
 # Programmes
