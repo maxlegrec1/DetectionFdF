@@ -21,15 +21,25 @@ def train():                #création du modèle
   model.add(tf.keras.layers.MaxPooling2D(input_shape = (210,465,3)))
   model.add(tf.keras.layers.Conv2D(16, 3, activation = 'relu'))
   model.add(tf.keras.layers.MaxPooling2D())
-  model.add(tf.keras.layers.Conv2D(16, 3, activation = 'relu'))
+  model.add(tf.keras.layers.Conv2D(8, 3, activation = 'relu'))
   model.add(tf.keras.layers.MaxPooling2D())
   #model.add(tf.keras.layers.Conv2D(16, 3, activation = 'relu'))
   #model.add(tf.keras.layers.MaxPooling2D())
 
   model.add(tf.keras.layers.Flatten())
 
-  model.add(tf.keras.layers.Dense(64, activation = 'relu'))
+  #add Dropout
+  
+  '''model.add(tf.keras.layers.Dense(20, activation = 'relu'))
+  model.add(tf.keras.layers.Dense(10, activation = 'relu'))
+  model.add(tf.keras.layers.Dense(2, activation = 'softmax'))'''
+  #add dropout layers
+  model.add(tf.keras.layers.Dense(20, activation = 'relu'))
+  model.add(tf.keras.layers.Dropout(0.2))
+  model.add(tf.keras.layers.Dense(10, activation = 'relu'))
+  model.add(tf.keras.layers.Dropout(0.2))
   model.add(tf.keras.layers.Dense(2, activation = 'softmax'))
+  
 
   model.summary()
 
@@ -37,7 +47,7 @@ def train():                #création du modèle
 
   history = model.fit(x = train_X, y = train_y, epochs = 3, batch_size = 128, validation_data = (val_X, val_Y))
 
-  model.save("Saved_models/model2.h5")
+  model.save("Saved_models/model3.h5")
   return model
 
 def predic(signals, model):     #prédiction des données

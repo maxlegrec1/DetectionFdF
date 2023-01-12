@@ -84,8 +84,8 @@ def plot_with_path(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     samples=samples[:,0]
     #if random>1/2: filter samples
 
-    if random.random()>1/2:
-        samples=filtre(samples)
+    #if random.random()>1/2:
+    #    samples=filtre(samples)
     
     return plotstft(samples, samplerate, binsize=2**10, plotpath=plotpath, colormap="jet")
 

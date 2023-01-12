@@ -4,14 +4,14 @@ from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from tqdm import tqdm
 
-DB_TEST = "Nature2"
+DB_TEST = "nouveau"
 
 if __name__ == "__main__":
     y_pred=[]
     y_true=[]
     for WAVFILE in tqdm(os.listdir(DB_TEST)):
         if WAVFILE.endswith(".wav"):
-            pred=execute(DB_TEST + "/" + WAVFILE, "SVM")
+            pred=execute(DB_TEST + "/" + WAVFILE, "CNN")
             print(pred)
             bool=True
             if WAVFILE[:3]=="Feu":

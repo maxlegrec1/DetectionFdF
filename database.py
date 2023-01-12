@@ -29,10 +29,10 @@ def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
         print(int(fichier[1]))
 
 def rennomer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
-    folder="./dataset_fire_esc50"
+    folder="./dataset_rain_esc50"
     for count, filename in enumerate(os.listdir(folder)):
         src =f"{folder}/{filename}"
-        dst =f"{folder}/Feu{filename}"
+        dst =f"{folder}/Autre{filename}"
         os.rename(src,dst)
 #rennomer_autre()
 
@@ -81,6 +81,10 @@ def silence(data): #enlever les silences de début et de fin
         j -= 1
 
     return (i, j)
+import soundfile as sf
+path="Feu1.wav"
+data,sr=sf.read("Feu1.wav")
+
 
 def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): #diviser un son trop long en plusieurs sons plus petits (de 4 secondes)
     nombre_points = len(data)
@@ -90,6 +94,9 @@ def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): #divis
         return [audio1] + diviser_son(data[points_esperes:])
     else:
         return []
+#coupe=diviser_son(data,sample_freq,4)
+#for i in range(len(coupe)):
+#    wavio.write(f"nouveau/{path[:4]}{i}.wav", coupe[i], sample_freq,sampwidth=4)
 
 def feu_to_dataset(): #on transfere les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
     for count, filename in enumerate(os.listdir("Feu")):
