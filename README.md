@@ -38,3 +38,6 @@ Programme permettant de charger un modèle pré-saved pour évaluer ses performa
 
 ## svm.py
 Programme permettant d'entraîner un modèle SVM sur les données d'entrainement, et de l'utiliser pour prédire les classes des données test
+
+## visualisation.py
+Programme permettant de visualiser la performance d'un modèle (CNN ou SVM) sur un dataset donné, renvoyant en sortie une matrice de confusion
