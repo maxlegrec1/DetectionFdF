@@ -4,7 +4,7 @@ from conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from tqdm import tqdm
 
-DB_TEST = "dataset_fire_esc50"
+DB_TEST = "Nature2"
 
 if __name__ == "__main__":
     y_pred=[]
