@@ -6,7 +6,7 @@ import wavio
 sample_freq=44100
 audio_duration=4
 
-def trier_bonne_longueur(x): #on supprime de la base de données les sons ne faisant pas 4 secondes
+def trier_bonne_longueur(x): #on supprime de la base de données les sons faisant moins de 4 secondes
     folder="audio/fold"+str(x)
     folder2="audio/poubelle"
     for _, filename in enumerate(os.listdir(folder)):
@@ -18,7 +18,7 @@ def trier_bonne_longueur(x): #on supprime de la base de données les sons ne fai
                 dst =f"{folder2}/{filename}"
                 os.rename(src,dst)
 
-def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
+def rangement(x): #on trie les fichiers ne contenant pas de feu par classes (il y 10 classes différentes)
     folder="audio/fold"+str(x)
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
@@ -28,15 +28,14 @@ def rangement(x): #on trie les fichiers ne contenant pas de feu par classes
         os.rename(src,dst)
         print(int(fichier[1]))
 
-def renommer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu
+def renommer_autre(): #on ajoute "Autre" devant chaque fichier ne contenant pas de feu (pour simplifier le traitement ulterieur)
     folder="./Nature2"
     for count, filename in enumerate(os.listdir(folder)):
         src =f"{folder}/{filename}"
         dst =f"{folder}/Autre{filename}"
         os.rename(src,dst)
-#renommer_autre()
 
-def distribution(x): #pour connaître la répartition selon les différentes classes 
+def distribution(x): #pour connaître la répartition des sons selon les différentes classes 
     folder="audio/fold"+str(x)
     liste=[0,0,0,0,0,0,0,0,0,0]
     for count, filename in enumerate(os.listdir(folder)):
@@ -44,7 +43,7 @@ def distribution(x): #pour connaître la répartition selon les différentes cla
         liste[int(fichier[1])]+=1
     print(liste)
 
-def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'échantillonage souhaitée
+def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'échantillonage souhaitée par classes
     choix=[0 for k in range(10)]
     for k in range(1,11):
         folder="audio/fold"+str(k)
@@ -59,7 +58,7 @@ def nbre_bonne_freq(): #on regarde combien de sons disposent de la fréquence d'
         choix[k-1]=nbre
     print(choix)
 
-def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échantillonage de 44 100 Hz
+def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échantillonage de 44 100 Hz (on transfère les autres dans un dossier poubelle)
     for k in range(1,11):
         folder="audio/fold"+str(k)
         folder2="audio/poubelle_freq"
@@ -67,12 +66,11 @@ def tri_bonne_freq(): #on ne garde que les fichiers avec une fréquence d'échan
         for count, filename in enumerate(os.listdir(folder)):
             data,samplerate=sf.read(f"{folder}/{filename}")
             if samplerate!=sample_freq:
-                print("c nul")
                 src =f"{folder}/{filename}"  
                 dst =f"{folder2}/{filename}"
                 os.rename(src,dst)
 
-def silence(data): #enlever les silences de début et de fin
+def silence(data): #on enleve les silences possiblement présent au début et à la fin de l'enregistrement
     i = 0
     while i < len(data) and data[i] == 0:
         i += 1
@@ -82,7 +80,23 @@ def silence(data): #enlever les silences de début et de fin
 
     return (i, j)
 
-def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): #diviser un son trop long en plusieurs sons plus petits (de 4 secondes)
+def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): 
+    '''
+    On divise un son trop long en plusieurs sons plus petits (de 4 secondes)
+
+    Parameters
+    ----------
+    data : ndarray
+        -- le son que l'on souhaite diviser
+    sr : int
+        -- la fréquence d'échantillonage utilisé
+    audio_duration : float
+        -- durée souhaitée des sons en sorties
+    Returns
+    -------
+    divide_sound: list
+        -- liste des petits sons 
+    '''
     nombre_points = len(data)
     points_esperes = sample_freq * audio_duration
     if nombre_points >= points_esperes:
@@ -90,6 +104,7 @@ def diviser_son(data, sr = sample_freq, audio_duration = audio_duration): #divis
         return [audio1] + diviser_son(data[points_esperes:])
     else:
         return []
+
 
 def feu_to_dataset(): #on transfère les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
     for count, filename in enumerate(os.listdir("Feu")):
@@ -100,34 +115,28 @@ def feu_to_dataset(): #on transfère les sons contenant du feu dans le dataset (
         for k in range(len(signaux)):
             wavio.write(f"Dataset/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
 
-choix_final=[400, 175, 567, 435, 400, 400, 16, 400, 400, 400]
-
-def trier_mono(): #on enlève les fichiers qui ne sont pas en stereo
-    folder2="audio/poubelle_mono"
-    for k in range(1,11):
-        folder="audio/fold"+str(k)
-        for count, filename in enumerate(os.listdir(folder)):
-            data,samplerate=sf.read(f"{folder}/{filename}")
-            try:
-                print(data.shape[1])
-            except:
-                src =f"{folder}/{filename}" 
-                dst =f"{folder2}/{filename}"
-                os.rename(src,dst)
-
-stereos=[640, 175, 559, 408, 468, 450, 16, 454, 403, 654] #nombre de fichiers en stéréo par classes
-
-def vider_poubelle(poubelle): #si on souhaite récupérer des fichiers
+def vider_poubelle(poubelle): #si jamais on souhaite récupérer des fichiers des poubelles
     folder="audio/"+poubelle
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
         fichier=filename.split('-',3)
-        src =f"{folder}/{filename}"  # foldername/filename, if .py file is outside folder
+        src =f"{folder}/{filename}" 
         dst =f"{folder2}{int(fichier[1])+1}/{filename}"
         os.rename(src,dst)
 
-def autre_to_dataset(liste): #on transfère les fichiers ne contenant pas de feu dans le dataset
-    #on prend en entrée une liste qui nous donne le nombre de sons à prendre par classe
+def autre_to_dataset(liste): 
+    '''
+    On transfère les fichiers ne contenant pas de feu dans le dataset
+
+    Parameters
+    ----------
+    liste : list
+        -- le nombre de sons à prendre par classe
+
+    Returns
+    -------
+    None
+    '''
     folder2="Dataset"
     for k in range(1,11):
         nbre=liste[k-1]
@@ -141,10 +150,9 @@ def autre_to_dataset(liste): #on transfère les fichiers ne contenant pas de feu
             else:
                 break
 
-choix2=[400,175,559,408,400,400,16,400,400,400]
+choix2=[400,175,559,408,400,400,16,400,400,400] #cela correspond au nombres de fichiers audio par classe que l'on transfère dans le dataset
 
-def compter_dataset(): #pour connaître la proportion feu/pas feu
-    folder="Dataset/Test"
+def compter_dataset(folder): #pour connaître le nombre de sons de feu et de sons de pas feu
     feu=0
     autre=0
     for count, filename in enumerate(os.listdir(folder)):
@@ -152,16 +160,12 @@ def compter_dataset(): #pour connaître la proportion feu/pas feu
             feu+=1
         elif filename[:3]=="Aut":
             autre+=1
-        else:
-            print('il y a un probleme avec')
-            print(filename)
     print('Il y a '+str(feu)+" feu")
     print("Il y a "+str(autre)+" autre")
 
 
-def dataset_to_autre(): #Pour enlever les fichiers ne contenant pas de feu du dataset
+def dataset_to_autre(folder): #Pour enlever les fichiers ne contenant pas de feu du dataset (et remmetre les sons dans leurs dossiers respectifs)
     print("vide le dataset")
-    folder="Dataset/Validation"
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
         print("boucle")
@@ -184,8 +188,24 @@ def clear_dataset(): #on vide entièrement le dataset
 
 
 def check_dataset(folder,freq_echant,temps):
+    '''
+    On vérifie que le dataset correpond à nos attentes()
+
+    Parameters
+    ----------
+    folder : string
+        -- chemin du dosiier que l'on souhaite verifier
+    freq_echant : int
+        -- frequence souhaitée
+    echant_temps : float
+        -- temps souahité
+
+    Returns
+    -------
+    Print les problèmes du dataset ainsi que la répartition feu/pas feu
+    '''
     print("Début de check_dataset")
-    sil,freq,tem,feu,autre,nom,ext,mono=0,0,0,0,0,0,0,0
+    sil,freq,tem,feu,autre,nom,ext=0,0,0,0,0,0,0
     for count, filename in enumerate(os.listdir(folder)):
         data,samplerate=sf.read(f"{folder}/{filename}")
         if silence(data[:,0])!=(0,len(data)-1): #vérifie les silences
@@ -202,12 +222,6 @@ def check_dataset(folder,freq_echant,temps):
             nom+=1
         if filename[-4:]!=".wav": #vérifie l'extension des fichiers
             ext+=1
-        try:
-            data.shape[1]
-        except:
-            mono+=1
-    if mono!=0:
-        print("Il y a "+str(mono)+" fichiers mono")
     if ext!=0:
         print("Il y a "+str(ext)+" fichiers qui ne finissent pas en .wav")
     if nom!=0:
@@ -221,10 +235,9 @@ def check_dataset(folder,freq_echant,temps):
     print("La proportion feu/pas feu est de "+str(feu)+"/"+str(autre))
     print("fin")
 
-#check_dataset("DetectionFdF/Dataset",44100,4)
 
-def training_val_test(): #On divise le dataset en trois (Training/Validation/Test)
-    Feu,Autre=3455,3564
+def training_val_test(Feu,Autre): #On divise le dataset en trois (Training/Validation/Test)
+    #on prend en entrée le nombre de sons de feu et de pas feu (donc des entiers)
     folder="Dataset"
     list=["Training","Validation","Test"]
     coeff=[0.70,0.20,0.10]
@@ -247,7 +260,7 @@ def training_val_test(): #On divise le dataset en trois (Training/Validation/Tes
         
 
 
-def vider_training_val_test(): 
+def vider_training_val_test(): #on vide les sous dossiers du dataset 
     folder="Dataset"
     list=["Training","Validation","Test"]
     for i in range(3):
@@ -257,7 +270,7 @@ def vider_training_val_test():
             os.rename(src,dst)
 
 
-def autre_to_dataset2(liste): #on transfère les fichiers ne contenant pas de feu dans le dataset
+def autre_to_dataset2(liste): #on transfère les fichiers ne contenant pas de feu dans le dataset (on prend en compte la répartition training/validation/test)
     #on prend en entrée une liste qui nous donne le nombre de sons à prendre par classe
     folder2="Dataset"
     for k in range(1,11):
@@ -283,6 +296,7 @@ choix2=[400,175,559,408,400,400,16,400,400,400]
 
 
 def feu_to_dataset2(): #on transfère les sons contenant du feu dans le dataset (en les divisant en sons plus petits)
+    #on prend en compte la répartition training/validation/test
     for count, filename in enumerate(os.listdir("Feu")):
         name=filename.split('_',2)
         if int(name[1][:-4])<=50:
@@ -297,9 +311,8 @@ def feu_to_dataset2(): #on transfère les sons contenant du feu dans le dataset 
         for k in range(len(signaux)):
             wavio.write(f"{folder}/{filename[:-4]}_{k}.wav", signaux[k], samplerate, sampwidth=4)
 
-def delete_autre(): #Pour enlever les fichiers ne contenant pas de feu
+def delete_autre(folder): #On supprime les fichiers proveant de classes qui ne nous intéresse plus
     print("vide le dataset")
-    folder="Dataset/Test"
     folder2="audio/fold"
     for count, filename in enumerate(os.listdir(folder)):
         if filename[:3]=="Aut":
@@ -309,3 +322,42 @@ def delete_autre(): #Pour enlever les fichiers ne contenant pas de feu
                 src =f"{folder}/{filename}"  # foldername/filename, if .py file is outside folder
                 dst =f"{folder2}{int(fichier[1])+1}/{filename}"
                 os.rename(src,dst)
+
+def mp3_to_wav(folder): #transforme les sons .mp3 en .wav
+    for count, filename in enumerate(os.listdir(folder)):
+        src =f"{folder}/{filename}" 
+        dst =f"{folder}/{filename[:-3]}wav"
+        os.rename(src,dst)
+
+
+def melanges(folder,folder2,folder3):
+    '''
+    On mélange des sons de feu avec d'autre sons pour observer les résultats obtenues pour des feux avec un bruit de fond (bruit d'oiseaux par exemple)
+
+    Parameters
+    ----------
+    folder : string
+        -- chemin du dossier contenant les feux
+    folder2 : string
+        -- chemin du dossier contenant les bruits de fond à ajouter
+    folder3 : string
+        -- chemin du dossier dans lequel on stock le résultat
+
+    Returns
+    -------
+    None
+    '''
+    liste=[]
+    c=0
+    for count, filename in enumerate(os.listdir(folder2)):
+        liste.append(f"{folder2}/{filename}")
+    for count, filename in enumerate(os.listdir(folder)):
+        data,samplerate=sf.read(f"{folder}/{filename}")
+        data2,samplerate2=sf.read(f"{liste[c]}")
+        c+=1
+        print(c)
+        signal=data[:176400]
+        for k in range(len(data2)):
+            signal[k]=(data[k]+0.1*data2[k][0])
+            #signal[k][1]=data[k][1]+data2[k][1] #si le son est en stéréo
+        wavio.write(f"{folder3}/Feu{filename[:-4]}{count}.wav", signal, samplerate, sampwidth=4)
