@@ -1,6 +1,6 @@
 from main import execute
 import os
-from conf_matrix import show_confusion_matrix
+from IA_conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
 from tqdm import tqdm
 

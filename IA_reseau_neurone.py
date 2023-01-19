@@ -1,8 +1,8 @@
 import numpy as np
 import tensorflow as tf
-from conf_matrix import show_confusion_matrix
+from IA_conf_matrix import show_confusion_matrix
 from sklearn.metrics import confusion_matrix
-from dataset_for_nn import create_data_list
+from IA_dataset_for_nn import create_data_list
 
 def unison_shuffled_copies(couple):     #mélange les données pour éviter le sur-apprentissage
     (a, b) = couple
