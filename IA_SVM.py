@@ -1,18 +1,45 @@
-
-#load model
-
-import pickle
 import librosa
-
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
 def predic_svm(path_file,model):
-    #WAV_PATH = "Dataset/Test/Feu1_71_11.wav"
+
+    '''
+    prediction du modèle svm sur un fichier audio
+
+    Parameters
+    ----------
+    path_file : string
+        -- path of the file
+    model : model (SVM object) 
+        -- model choisi
+    
+    Returns
+    -------
+    prediction : int
+        -- prediction du model (0 si pas de feu, 1 si feu)
+    '''
+
+
     WAV_PATH = path_file
 
     def calcul_features_saving_csv(path_file, path_saved_features): #paths have to be string and without 'csv'
+        '''
+        creation des features et sauvegarde dans un csv
+
+        Parameters
+        ----------
+        path_file : string
+            -- path of the file
+        path_saved_features : string
+            -- path of the csv file where the features will be saved
+        
+        Returns
+        -------
+        None. (saves a csv file)
+        
+        '''
         zcr = [] #zero crossing rate
         mean_spectral_centroids = [] # moyenne du Spectral centroid
         rolloff_point = [] #calcul du spectral rolloff point
@@ -80,18 +107,17 @@ def predic_svm(path_file,model):
 
         
         
-        
+    #calcul des features et sauvegarde dans un csv
     calcul_features_saving_csv(WAV_PATH,"features_wav")
+
+    #chargement du csv et choix des features
     features=['zcr','rolloff','mfcc2','mfcc12']
     X_train_full = pd.read_csv('features_wav.csv').iloc[:,1:25]
     X_train = X_train_full.loc[:, features]
 
+    #prediction du modèle
     y_pred = model.predict(X_train)[0]
     if y_pred == 1:
         return [1]
     else:
         return [0]
-
-if __name__ == "__main__":
-    model = pickle.load(open("SVM_1.sav", 'rb'))
-    print(predic_svm("Dataset/Test/Feu1_71_11.wav",model))

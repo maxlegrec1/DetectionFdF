@@ -4,7 +4,7 @@ import numpy as np
 # Fonction qui affiche la matrice de confusion
 def show_confusion_matrix(matrix, labels):
     fig, ax = plt.subplots(figsize=(10,10))
-    im = ax.imshow(matrix)
+    ax.imshow(matrix)
     
     N = len(labels)
 
@@ -20,7 +20,7 @@ def show_confusion_matrix(matrix, labels):
     # Loop over data dimensions and create text annotations.
     for i in range(N):
         for j in range(N):
-            text = ax.text(j, i, matrix[i, j],
+            ax.text(j, i, matrix[i, j],
                            ha="center", va="center", color="w")
 
     ax.set_title("Matrice de confusion")
